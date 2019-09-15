@@ -213,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //   return NewRoute();
                 // }));
                 // Navigator.pushNamed(context, "new_page");
-                Navigator.of(context).pushNamed("new_page", arguments: "hi");
+                Navigator.of(context).pushNamed("new_page", arguments: "hi flutter");
               },
             ),
             FlatButton(
@@ -223,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Navigator.push(context, MaterialPageRoute(builder: (context) {
                 //   return RouterTestRoute();
                 // }));
-                Navigator.of(context).pushNamed("tip2", arguments: "hi");
+                Navigator.of(context).pushNamed("tip2", arguments: "hi flutter");
               },
             )
           ],
