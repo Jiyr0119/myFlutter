@@ -235,6 +235,19 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+            Text(
+              "Hello world",
+              textAlign: TextAlign.left,
+            ),
+            Text(
+              "Hello world! I'm Jack. " * 4,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              "Hello world",
+              textScaleFactor: 1.5,
+            ),
             RandomWordsWidget(),
             FlatButton(
               child: Text('open new route'),
@@ -331,6 +344,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     .pushNamed("tip2", arguments: "hi flutter");
               },
             ),
+            Text(
+              "Hello world",
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 18.0,
+                  height: 1.2,
+                  fontFamily: "Courier",
+                  background: new Paint()..color = Colors.yellow,
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.dashed),
+            ),
+            RaisedButton(
+              child: Text("normal"),
+              onPressed: () {
+                print('hello btn');
+              },
+            )
           ],
         ),
       ),
