@@ -25,129 +25,6 @@
 //     );
 //   }
 // }
-
-// class RandomWrods extends StatefulWidget {
-//   @override
-//   createState() => new RandomWrodsState();
-// }
-
-// class RandomWrodsState extends State<RandomWrods> {
-//   @override
-//   Widget build(BuildContext context) {
-//     // final wordPair = new WordPair.random();
-//     return new MaterialApp(
-//       title: "my flutter",
-//       theme: new ThemeData(primaryColor: Colors.pink),
-//       home: new Scaffold(
-//         appBar: new AppBar(
-//           title: new Text("ListView"),
-//           actions: <Widget>[
-//             new IconButton(
-//               icon: new Icon(Icons.list),
-//               onPressed: _pushSaved,
-//             )
-//           ],
-//         ),
-//         body: _buildSuggestions(),
-//       ),
-//     );
-//   }
-
-//   final _suggestions = <WordPair>[];
-//   final _biggerFont = const TextStyle(fontSize: 18.0);
-//   final _saved = new Set<WordPair>();
-
-//   Widget _buildSuggestions() {
-//     return new ListView.builder(
-//       padding: const EdgeInsets.all(16.0),
-//       itemBuilder: (context, i) {
-//         if (i.isOdd) return new Divider();
-//         final index = i ~/ 2;
-//         if (index >= _suggestions.length) {
-//           _suggestions.addAll(generateWordPairs().take(10));
-//         }
-//         return _buildRow(_suggestions[index]);
-//       },
-//     );
-//   }
-
-//   Widget _buildRow(WordPair pair) {
-//     final alreadySaved = _saved.contains(pair);
-//     return new ListTile(
-//       title: new Text(
-//         pair.asPascalCase,
-//         style: _biggerFont,
-//       ),
-//       trailing: new Icon(
-//         alreadySaved ? Icons.favorite : Icons.favorite_border,
-//         color: alreadySaved ? Colors.red : null,
-//       ),
-//       onTap: () {
-//         setState(() {
-//           if (alreadySaved) {
-//             _saved.remove(pair);
-//           } else {
-//             _saved.add(pair);
-//           }
-//         });
-//       },
-//     );
-//   }
-
-//   void _pushSaved() {
-//     Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
-//       final tiles = _saved.map((pair) {
-//         return new ListTile(
-//           title: new Text(pair.asPascalCase, style: _biggerFont),
-//         );
-//       });
-//       final divided =
-//           ListTile.divideTiles(context: context, tiles: tiles).toList();
-//       return new Scaffold(
-//         appBar: new AppBar(
-//           title: new Text("save Suggestions"),
-//         ),
-//         body: new ListView(children: divided),
-//       );
-//     }));
-//   }
-// }
-// 中文网 这个 demo 跑不起来
-// import 'package:flutter/material.dart';
-
-// void main() => runApp(new MyApp());
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return new Container(
-//       padding: const EdgeInsets.all(32.0),
-//       child: new Row(
-//         children: <Widget>[
-//           new Expanded(
-//             child: new Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: <Widget>[
-//                 new Container(
-//                   padding: const EdgeInsets.only(bottom: 8.0),
-//                   child: new Text(
-//                     'Oeschinen Lake Campground',
-//                     style: new TextStyle(fontWeight: FontWeight.bold),
-//                   ),
-//                 ),
-//                 new Text('Kandersteg, Switzerland',
-//                     style: new TextStyle(color: Colors.grey[500])),
-//               ],
-//             ),
-//           ),
-//           new Icon(Icons.star, color: Colors.red[500]),
-//           new Text('41')
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/widgets.dart';
@@ -176,6 +53,7 @@ class MyApp extends StatelessWidget {
           "new_snack": (context) => SnackRoute(),
           "new_cuper": (context) => CupertinoTestRoute(),
           "new_state": (context) => StateTest(),
+          "new_list": (context) => RandomWrods(),
           "/": (context) =>
               MyHomePage(title: 'Flutter Demo Home Page'), //注册首页路由
         },
@@ -187,6 +65,88 @@ class MyApp extends StatelessWidget {
             // 引导用户登录；其它情况则正常打开路由。
           });
         });
+  }
+}
+
+class RandomWrods extends StatefulWidget {
+  @override
+  createState() => new RandomWrodsState();
+}
+
+class RandomWrodsState extends State<RandomWrods> {
+  @override
+  Widget build(BuildContext context) {
+    // final wordPair = new WordPair.random();
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("ListView"),
+          actions: <Widget>[
+            new IconButton(
+              icon: new Icon(Icons.list),
+              onPressed: _pushSaved,
+            )
+          ],
+        ),
+        body: _buildSuggestions());
+  }
+
+  final _suggestions = <WordPair>[];
+  final _biggerFont = const TextStyle(fontSize: 18.0);
+  final _saved = new Set<WordPair>();
+
+  Widget _buildSuggestions() {
+    return new ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        if (i.isOdd) return new Divider();
+        final index = i ~/ 2;
+        if (index >= _suggestions.length) {
+          _suggestions.addAll(generateWordPairs().take(10));
+        }
+        return _buildRow(_suggestions[index]);
+      },
+    );
+  }
+
+  Widget _buildRow(WordPair pair) {
+    final alreadySaved = _saved.contains(pair);
+    return new ListTile(
+      title: new Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+      trailing: new Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          if (alreadySaved) {
+            _saved.remove(pair);
+          } else {
+            _saved.add(pair);
+          }
+        });
+      },
+    );
+  }
+
+  void _pushSaved() {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+      final tiles = _saved.map((pair) {
+        return new ListTile(
+          title: new Text(pair.asPascalCase, style: _biggerFont),
+        );
+      });
+      final divided =
+          ListTile.divideTiles(context: context, tiles: tiles).toList();
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("save Suggestions"),
+        ),
+        body: new ListView(children: divided),
+      );
+    }));
   }
 }
 
@@ -216,6 +176,11 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _counter++;
     });
+  }
+
+  void _onPressed() {
+    // print("btn click");
+    Navigator.of(context).pushNamed("new_list", arguments: "hi flutter");
   }
 
   @override
@@ -360,7 +325,18 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 print('hello btn');
               },
-            )
+            ),
+            IconButton(
+              icon: Icon(Icons.thumb_up),
+              onPressed: () {
+                print("great");
+              },
+            ),
+            FlatButton.icon(
+              icon: Icon(Icons.info),
+              label: Text("详情"),
+              onPressed: _onPressed,
+            ),
           ],
         ),
       ),
@@ -378,14 +354,91 @@ class NewRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     // var args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("New route"),
-      ),
-      body: Center(
-        child: Text("This is new route"),
+        appBar: AppBar(
+          title: Text("New route"),
+        ),
+        body: Column(
+          children: <Widget>[
+            TextField(
+              autofocus: true,
+              decoration: InputDecoration(
+                  labelText: "用户名",
+                  hintText: "用户名或邮箱",
+                  prefixIcon: Icon(Icons.person)),
+              onChanged: (v) {
+                print("onChange:$v");
+              },
+            ),
+            TextField(
+              decoration: InputDecoration(
+                  labelText: "密码",
+                  hintText: "您的登录密码",
+                  prefixIcon: Icon(Icons.lock)),
+              obscureText: true,
+            ),
+            FocusTestRoute()
+          ],
+        ));
+    // return Echo(text: "hello world");
+  }
+}
+// input
+class FocusTestRoute extends StatefulWidget {
+  @override
+  _FocusTestRouteState createState() => new _FocusTestRouteState();
+}
+
+class _FocusTestRouteState extends State<FocusTestRoute> {
+  FocusNode focusNode1 = new FocusNode();
+  FocusNode focusNode2 = new FocusNode();
+  FocusScopeNode focusScopeNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: <Widget>[
+          TextField(
+            autofocus: true,
+            focusNode: focusNode1, //关联focusNode1
+            decoration: InputDecoration(labelText: "input1"),
+          ),
+          TextField(
+            focusNode: focusNode2, //关联focusNode2
+            decoration: InputDecoration(labelText: "input2"),
+          ),
+          Builder(
+            builder: (ctx) {
+              return Column(
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text("移动焦点"),
+                    onPressed: () {
+                      //将焦点从第一个TextField移到第二个TextField
+                      // 这是一种写法 FocusScope.of(context).requestFocus(focusNode2);
+                      // 这是第二种写法
+                      if (null == focusScopeNode) {
+                        focusScopeNode = FocusScope.of(context);
+                      }
+                      focusScopeNode.requestFocus(focusNode2);
+                    },
+                  ),
+                  RaisedButton(
+                    child: Text("隐藏键盘"),
+                    onPressed: () {
+                      // 当所有编辑框都失去焦点时键盘就会收起
+                      focusNode1.unfocus();
+                      focusNode2.unfocus();
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
-    // return Echo(text: "hello world");
   }
 }
 
@@ -501,7 +554,7 @@ class ContextRoute extends StatelessWidget {
       ),
       body: Container(
         child: Builder(builder: (context) {
-          // 在Widget树中向上查找最近的父级`Scaffold` widget
+          // 在Widget树中向��查找最近的父级`Scaffold` widget
           Scaffold scaffold = context.ancestorWidgetOfExactType(Scaffold);
           // 直接返回 AppBar的title， 此处实际上是Text("Context测试")
           return (scaffold.appBar as AppBar).title;
