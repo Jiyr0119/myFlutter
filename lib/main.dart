@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: new MyHomePage(title: 'Flutter'),
     );
   }
 }
@@ -90,9 +90,15 @@ class _ScaffoldRouteState extends State<ScaffoldRoute>
         shape: CircularNotchedRectangle(), // 底部导航栏打一个圆形的洞
         child: Row(
           children: [
-            IconButton(icon: Icon(Icons.home)),
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {},
+            ),
             SizedBox(), //中间位置空出
-            IconButton(icon: Icon(Icons.business)),
+            IconButton(
+              icon: Icon(Icons.business),
+              onPressed: () {},
+            ),
           ],
           mainAxisAlignment: MainAxisAlignment.spaceAround, //均分底部导航栏横向空间
         ),
@@ -119,10 +125,21 @@ class _ScaffoldRouteState extends State<ScaffoldRoute>
         controller: _tabController,
         children: tabs.map((e) {
           //创建3个Tab页
-          return Container(
-            alignment: Alignment.center,
-            child: Text(e, textScaleFactor: 5),
-          );
+          print(e);
+          if (e == '新闻') {
+            return Container(
+              alignment: Alignment.center,
+              child: SingleChildScrollViewTestRoute(),
+            );
+          } else {
+            return Container(
+              alignment: Alignment.center,
+              child: Text(
+                e,
+                textScaleFactor: 2.0,
+              ),
+            );
+          }
         }).toList(),
       ),
     );
@@ -130,7 +147,7 @@ class _ScaffoldRouteState extends State<ScaffoldRoute>
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      // _selectedIndex = index;
     });
   }
 
@@ -187,6 +204,32 @@ class MyDrawer extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SingleChildScrollViewTestRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return Scrollbar(
+      // 显示进度条
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            //动态创建一个List<Widget>
+            children: str
+                .split("")
+                //每一个字母都用一个Text显示,字体为原来的两倍
+                .map((c) => Text(
+                      c,
+                      textScaleFactor: 2.0,
+                    ))
+                .toList(),
+          ),
         ),
       ),
     );
