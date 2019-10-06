@@ -1,3 +1,4 @@
+import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(new MyApp());
@@ -24,14 +25,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -49,7 +42,7 @@ class ScaffoldRoute extends StatefulWidget {
 
 class _ScaffoldRouteState extends State<ScaffoldRoute>
     with SingleTickerProviderStateMixin {
-  int _selectedIndex = 1;
+  // int _selectedIndex = 1;
 
   TabController _tabController; //需要定义一个Controller
   List tabs = ["新闻", "历史", "图片"];
@@ -126,30 +119,40 @@ class _ScaffoldRouteState extends State<ScaffoldRoute>
         children: tabs.map((e) {
           //创建3个Tab页
           print(e);
-          if (e == '新闻') {
-            return Container(
-              alignment: Alignment.center,
-              child: SingleChildScrollViewTestRoute(),
-            );
-          } else {
-            return Container(
-              alignment: Alignment.center,
-              child: Text(
-                e,
-                textScaleFactor: 2.0,
-              ),
-            );
+          switch (e) {
+            case '新闻':
+              return Container(
+                alignment: Alignment.center,
+                child: SingleChildScrollViewTestRoute(),
+              );
+            case '历史':
+              return Container(
+                alignment: Alignment.center,
+                // child: InfiniteListView(),
+                child: Text(
+                  e,
+                  textScaleFactor: 2.0,
+                ),
+                // child: InfiniteListView(),
+              );
+            case '图片':
+              return Container(
+                alignment: Alignment.center,
+                child: FixView(),
+              );
+              break;
+            default:
           }
         }).toList(),
       ),
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      // _selectedIndex = index;
-    });
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     // _selectedIndex = index;
+  //   });
+  // }
 
   void _onAdd() {}
 }
@@ -177,13 +180,14 @@ class MyDrawer extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: ClipOval(
                       child: Image.asset(
-                        "imgs/avatar.png",
+                        "assets/images/lake.jpg",
                         width: 80,
+                        height: 80,
                       ),
                     ),
                   ),
                   Text(
-                    "Wendux",
+                    "Jiyr",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
@@ -233,5 +237,85 @@ class SingleChildScrollViewTestRoute extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class InfiniteListView extends StatefulWidget {
+  @override
+  _InfiniteListViewState createState() => new _InfiniteListViewState();
+}
+
+class _InfiniteListViewState extends State<InfiniteListView> {
+  static const loadingTag = "##loading##"; //表尾标记
+  var _words = <String>[loadingTag];
+
+  @override
+  void initState() {
+    super.initState();
+    _retrieveData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: _words.length,
+      itemBuilder: (context, index) {
+        //如果到了表尾
+        if (_words[index] == loadingTag) {
+          //不足100条，继续获��数据
+          if (_words.length - 1 < 100) {
+            //获取数据
+            _retrieveData();
+            //加载时显示loading
+            return Container(
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              child: SizedBox(
+                  width: 24.0,
+                  height: 24.0,
+                  child: CircularProgressIndicator(strokeWidth: 2.0)),
+            );
+          } else {
+            //已经加载了100条数据，不再获取数据。
+            return Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  "没有更多了",
+                  style: TextStyle(color: Colors.grey),
+                ));
+          }
+        }
+        //显示单词列表项
+        return ListTile(title: Text(_words[index]));
+      },
+      separatorBuilder: (context, index) => Divider(height: .0),
+    );
+  }
+
+  void _retrieveData() {
+    Future.delayed(Duration(seconds: 2)).then((e) {
+      _words.insertAll(
+          _words.length - 1,
+          //每次生成20个单词
+          generateWordPairs().take(20).map((e) => e.asPascalCase).toList());
+      setState(() {
+        //重新构建列表
+      });
+    });
+  }
+}
+
+class FixView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: <Widget>[
+      ListTile(title: Text("商品列表")),
+      Expanded(
+        child: ListView.builder(itemBuilder: (BuildContext context, int index) {
+          return ListTile(title: Text("$index"));
+        }),
+      ),
+    ]);
   }
 }
