@@ -118,7 +118,8 @@ class _ScaffoldRouteState extends State<ScaffoldRoute>
         controller: _tabController,
         children: tabs.map((e) {
           //创建3个Tab页
-          print(e);
+          // print(e);
+          
           switch (e) {
             case '新闻':
               return Container(
